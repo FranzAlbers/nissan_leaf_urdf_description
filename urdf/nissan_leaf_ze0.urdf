@@ -1,0 +1,109 @@
+<?xml version="1.0" ?>
+<!-- TODO: Add GPS sensor -->
+<robot name="nissan_leaf_ze0">
+  <material name="blue">
+    <color rgba="0.1 0.1 0.5 1"/>
+  </material>
+
+  <!-- base_link relates to its projection on the ground by this offset:
+    <origin xyz="0 0 0.31" rpy="0 0 0"/>
+  -->
+
+
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://nissan_leaf_urdf_description/meshes/NissanLeafZE0.dae" scale="1 1 1"/>
+      </geometry>
+      <origin xyz="1.08 0 0" rpy="0 0 1.570796"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="4.7 2.25 2.3"/>
+      </geometry>
+      <origin xyz="1.1 0 1" rpy="0 0 0"/>
+    </collision>
+  </link>
+
+  <!-- Center of Gravity link -->
+  <link name="nav_base"/>
+
+  <joint name="nav_base_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="nav_base"/>
+    <origin xyz="1.35 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <link name="imu"/>
+
+  <joint name="imu_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="imu"/>
+    <origin xyz="-0.45 0 0.45" rpy="0 0 0"/>
+  </joint>
+
+  <link name="gnss"/>
+
+  <joint name="gnss_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="gnss"/>
+    <origin xyz="0.3 0 1.6" rpy="0 0 0"/>
+  </joint>
+
+  <link name="os1_lidar">
+    <collision>
+      <geometry>
+        <cylinder length="0.0869" radius="0.05165"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <!-- TODO: Get or calculate inertia values -->
+      <mass value="0.1"/>
+      <inertia ixx="1.02083e-5" ixy="0" ixz="0"
+        iyy="1.02083e-5" iyz="0"
+        izz="2e-5"/>
+    </inertial>
+  </link>
+
+  <joint name="lidar_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="os1_lidar"/>
+    <origin xyz="1.0 0 1.9" rpy="0 0 0"/>
+  </joint>
+
+  <link name="markermap"/>
+
+  <joint name="markermap" type="fixed">
+    <parent link="os1_lidar"/>
+    <child link="markermap"/>
+    <origin xyz="0.963 0 -0.5" rpy="0 0.3244 -0.0197"/>
+  </joint>
+
+  <link name="mobileye"/>
+
+  <joint name="mobileye" type="fixed">
+    <parent link="os1_lidar"/>
+    <child link="mobileye"/>
+    <origin xyz="1 0 -0.6" rpy="-1.570796 0 -1.570796"/>
+  </joint>
+
+
+  <link name="camera_front"/>
+
+  <joint name="camera_front_joint" type="fixed">
+    <parent link="os1_lidar"/>
+    <child link="camera_front"/>
+    <origin xyz="0.43 0 -0.24" rpy="-1.570796 0 -1.570796"/>
+  </joint>
+
+  <link name="camera_rear"/>
+
+  <joint name="camera_rear_joint" type="fixed">
+    <parent link="os1_lidar"/>
+    <child link="camera_rear"/>
+    <origin xyz="-0.50 0 -0.18" rpy="-1.570796 0 1.570796"/>
+  </joint>
+
+
+
+</robot>
